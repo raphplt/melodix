@@ -1,3 +1,4 @@
+'use client'
 import SpotifyProfile from '@/components/SpotifyProfile'
 
 export default function SpotifyPage() {
