@@ -8,14 +8,76 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
 } from '@/components/ui/navigation-menu'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, User, LogOut } from 'lucide-react'
 import { useState } from 'react'
+import { useSpotifyAuth } from '@/contexts/AuthContext'
+import Image from 'next/image'
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const {
+    isAuthenticated,
+    isLoading,
+    user,
+    signIn,
+    signOut,
+    hasSpotifyAccess,
+  } = useSpotifyAuth()
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen)
+  }
+
+  // Composant pour l'affichage de l'utilisateur connecté
+  const UserDisplay = () => {
+    if (isLoading) {
+      return (
+        <div className="flex items-center space-x-2">
+          <div className="h-8 w-8 animate-pulse rounded-full bg-gray-300"></div>
+          <div className="h-4 w-20 animate-pulse rounded bg-gray-300"></div>
+        </div>
+      )
+    }
+
+    if (isAuthenticated && user) {
+      return (
+        <div className="flex items-center space-x-3">
+          {user.images && user.images[0] && (
+            <Image
+              src={user.images[0].url}
+              alt={user.display_name}
+              width={32}
+              height={32}
+              className="rounded-full"
+            />
+          )}
+          <div className="hidden lg:block">
+            <p className="text-foreground text-sm font-medium">
+              {user.display_name}
+            </p>
+            <p className="text-muted-foreground text-xs">
+              {hasSpotifyAccess ? 'Connecté' : 'Connexion expirée'}
+            </p>
+          </div>
+          <Button
+            onClick={signOut}
+            variant="ghost"
+            size="sm"
+            className="text-muted-foreground hover:text-destructive"
+          >
+            <LogOut className="h-4 w-4" />
+            <span className="hidden sm:ml-2 sm:inline">Déconnexion</span>
+          </Button>
+        </div>
+      )
+    }
+
+    return (
+      <Button onClick={signIn} className="btn-spotify border-0 shadow-lg">
+        <User className="mr-2 h-4 w-4" />
+        Connecter Spotify
+      </Button>
+    )
   }
 
   return (
@@ -35,53 +97,47 @@ export default function Header() {
           <NavigationMenu className="hidden md:flex">
             <NavigationMenuList>
               <NavigationMenuItem>
-                <Link href="/" legacyBehavior passHref>
+                <Link href="/" passHref>
                   <NavigationMenuLink className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg px-4 py-2 transition-all duration-300 hover:scale-105">
                     Accueil
                   </NavigationMenuLink>
                 </Link>
-              </NavigationMenuItem>{' '}
+              </NavigationMenuItem>
               <NavigationMenuItem>
-                <Link href="/spotify" legacyBehavior passHref>
+                <Link href="/spotify" passHref>
                   <NavigationMenuLink className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg px-4 py-2 transition-all duration-300 hover:scale-105">
                     Spotify
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <Link href="#features" legacyBehavior passHref>
+                <Link href="#features" passHref>
                   <NavigationMenuLink className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg px-4 py-2 transition-all duration-300 hover:scale-105">
                     Fonctionnalités
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <Link href="#stats" legacyBehavior passHref>
+                <Link href="#stats" passHref>
                   <NavigationMenuLink className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg px-4 py-2 transition-all duration-300 hover:scale-105">
                     Stats
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <Link href="#newsletter" legacyBehavior passHref>
+                <Link href="#newsletter" passHref>
                   <NavigationMenuLink className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg px-4 py-2 transition-all duration-300 hover:scale-105">
                     Contact
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
             </NavigationMenuList>
-          </NavigationMenu>
-          {/* Premium CTA Button */}
+          </NavigationMenu>{' '}
+          {/* Premium CTA Button ou User Display */}
           <div className="hidden md:flex">
-            <Button
-              variant="default"
-              className="btn-spotify border-0 shadow-lg"
-              asChild
-            >
-              <Link href="/spotify">Connecter Spotify</Link>
-            </Button>
+            <UserDisplay />
           </div>
-          {/* Premium Mobile Menu Button */}{' '}
+          {/* Premium Mobile Menu Button */}
           <button
             onClick={toggleMobileMenu}
             className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg p-2 transition-all duration-300 hover:scale-105 md:hidden"
@@ -133,14 +189,9 @@ export default function Header() {
                 onClick={toggleMobileMenu}
               >
                 Contact
-              </Link>
+              </Link>{' '}
               <div className="px-4 pt-2">
-                <Button
-                  className="btn-spotify w-full border-0 shadow-lg"
-                  asChild
-                >
-                  <Link href="/spotify">Connecter Spotify</Link>
-                </Button>
+                <UserDisplay />
               </div>
             </nav>
           </div>

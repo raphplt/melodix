@@ -49,7 +49,7 @@ export default function Hero() {
               >
                 Accès anticipé gratuit
                 <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>{' '}
+              </Button>
               <Button
                 variant="outline"
                 size="lg"

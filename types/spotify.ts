@@ -80,3 +80,18 @@ export interface SpotifyTopArtist {
   }
   popularity: number
 }
+
+export type SpotifyTimeRange = 'short_term' | 'medium_term' | 'long_term'
+
+export interface SpotifyFetchParams {
+  timeRange: SpotifyTimeRange
+  limit: number
+}
+
+export interface SpotifyDataCache {
+  userData: SpotifyUser | null
+  topTracks: SpotifyTrack[]
+  topArtists: SpotifyTopArtist[]
+  lastFetched: string
+  params: SpotifyFetchParams
+}

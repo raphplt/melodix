@@ -130,7 +130,6 @@ export default function Features() {
                 déjà leurs compétences.
               </p>
               <div className="flex flex-col justify-center gap-4 sm:flex-row">
-                {' '}
                 <Button
                   asChild
                   className="from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-primary-foreground bg-gradient-to-r"

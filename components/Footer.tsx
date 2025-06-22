@@ -92,7 +92,7 @@ export default function Footer() {
             <div>
               <h3 className="text-foreground gradient-text-primary mb-6 text-lg font-semibold">
                 Produit
-              </h3>{' '}
+              </h3>
               <ul className="space-y-3">
                 {footerLinks.product.map((link) => (
                   <li key={link.name}>
@@ -167,7 +167,7 @@ export default function Footer() {
             {/* Copyright */}
             <div className="text-muted-foreground mb-6 text-sm md:mb-0">
               © {currentYear} Melodix. Tous droits réservés.
-            </div>{' '}
+            </div>
             {/* Premium Social Links */}
             <div className="flex items-center space-x-4">
               <span className="text-muted-foreground mr-2 text-sm">

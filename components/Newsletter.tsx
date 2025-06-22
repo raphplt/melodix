@@ -137,7 +137,7 @@ export default function Newsletter() {
                 <div className="flex flex-col items-center gap-4">
                   <p className="text-muted-foreground text-sm">
                     Ou connectez votre compte Spotify dès maintenant
-                  </p>{' '}
+                  </p>
                   <Button
                     variant="outline"
                     className="border-border hover:bg-accent hover:border-border/60"
