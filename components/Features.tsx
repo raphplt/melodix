@@ -1,103 +1,115 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { 
-  Headphones, 
-  Music, 
-  Users, 
-  Trophy, 
-  Brain, 
+import { Button } from '@/components/ui/button'
+import {
+  Headphones,
+  Music,
+  Users,
+  Trophy,
+  Brain,
   Zap,
   Target,
   Gamepad2,
-  TrendingUp
+  TrendingUp,
 } from 'lucide-react'
+import Link from 'next/link'
 
 const features = [
   {
     icon: Headphones,
-    title: 'Audio Training',
-    description: 'Develop your musical ear with scientifically-designed exercises that improve pitch recognition, rhythm detection, and audio analysis skills.',
+    title: 'Entraînement auditif',
+    description:
+      "Développez votre oreille musicale avec des exercices scientifiquement conçus qui améliorent la reconnaissance des hauteurs, la détection du rythme et les compétences d'analyse audio.",
   },
   {
     icon: Music,
-    title: 'Music Discovery',
-    description: 'Explore new genres, artists, and tracks through curated challenges that expand your musical horizons and introduce you to hidden gems.',
+    title: 'Découverte musicale',
+    description:
+      'Explorez de nouveaux genres, artistes et morceaux grâce à des défis personnalisés qui élargissent vos horizons musicaux et vous font découvrir des pépites cachées.',
   },
   {
     icon: Users,
-    title: 'Social Challenges',
-    description: 'Compete with friends and the global community in real-time music challenges, leaderboards, and collaborative playlists.',
+    title: 'Défis sociaux',
+    description:
+      'Affrontez vos amis et la communauté mondiale dans des défis musicaux en temps réel, des classements et des playlists collaboratives.',
   },
   {
     icon: Brain,
-    title: 'Adaptive Learning',
-    description: 'Our AI-powered system adjusts difficulty based on your progress, ensuring optimal learning pace and personalized challenges.',
+    title: 'Apprentissage adaptatif',
+    description:
+      "Notre système alimenté par l'IA ajuste la difficulté en fonction de votre progression, garantissant un rythme d'apprentissage optimal et des défis personnalisés.",
   },
   {
     icon: Trophy,
-    title: 'Achievement System',
-    description: 'Unlock badges, earn points, and track your musical journey with comprehensive progress tracking and milestone rewards.',
+    title: 'Système de récompenses',
+    description:
+      "Débloquez des badges, gagnez des points et suivez votre parcours musical avec un suivi complet des progrès et des récompenses d'étapes.",
   },
   {
     icon: Zap,
-    title: 'Real-time Feedback',
-    description: 'Get instant feedback on your performance with detailed analytics and suggestions for improvement on every challenge.',
+    title: 'Retour en temps réel',
+    description:
+      "Obtenez un retour instantané sur vos performances avec des analyses détaillées et des suggestions d'amélioration pour chaque défi.",
   },
   {
     icon: Target,
-    title: 'Precision Training',
-    description: 'Focus on specific musical skills with targeted exercises for interval recognition, chord identification, and genre classification.',
+    title: 'Entraînement de précision',
+    description:
+      "Concentrez-vous sur des compétences musicales spécifiques avec des exercices ciblés pour la reconnaissance d'intervalles, l'identification d'accords et la classification de genres.",
   },
   {
     icon: Gamepad2,
-    title: 'Gamified Experience',
-    description: 'Learn through play with engaging game mechanics, streaks, daily challenges, and interactive musical puzzles.',
+    title: 'Expérience gamifiée',
+    description:
+      'Apprenez en jouant avec des mécaniques de jeu engageantes, des séries, des défis quotidiens et des puzzles musicaux interactifs.',
   },
   {
     icon: TrendingUp,
-    title: 'Progress Analytics',
-    description: 'Visualize your improvement over time with detailed statistics, performance graphs, and skill development tracking.',
+    title: 'Analyses de progression',
+    description:
+      'Visualisez votre amélioration au fil du temps avec des statistiques détaillées, des graphiques de performance et un suivi du développement des compétences.',
   },
 ]
 
 export default function Features() {
   return (
-    <section id="features" className="py-24 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
+    <section id="features" className="px-4 py-24 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-            Powerful Features for{' '}
-            <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-              Musical Growth
+        <div className="mb-16 text-center">
+          <h2 className="text-foreground mb-6 text-3xl font-bold md:text-4xl lg:text-5xl">
+            Des fonctionnalités puissantes pour
+            <span className="from-primary to-secondary bg-gradient-to-r bg-clip-text text-transparent">
+              votre croissance musicale
             </span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Discover a comprehensive suite of tools designed to enhance your musical abilities 
-            and connect you with a vibrant community of music enthusiasts.
+          <p className="text-muted-foreground mx-auto max-w-3xl text-xl">
+            Découvrez une suite complète d&apos;outils conçus pour améliorer vos
+            capacités musicales et vous connecter avec une communauté dynamique
+            de passionnés de musique.
           </p>
         </div>
 
         {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {features.map((feature, index) => {
             const IconComponent = feature.icon
             return (
-              <Card 
+              <Card
                 key={index}
-                className="bg-white/10 backdrop-blur-lg border-white/20 hover:bg-white/15 transition-all duration-300 hover:scale-105 hover:shadow-xl group"
+                className="bg-card/10 border-border/20 hover:bg-card/15 group backdrop-blur-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
               >
                 <CardHeader className="pb-4">
                   <div className="flex items-center space-x-4">
-                    <div className="p-3 rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-300/30 group-hover:from-purple-500/30 group-hover:to-pink-500/30 transition-all duration-300">
-                      <IconComponent className="h-6 w-6 text-purple-600" />
+                    <div className="from-primary/20 to-secondary/20 border-primary/30 group-hover:from-primary/30 group-hover:to-secondary/30 rounded-lg border bg-gradient-to-br p-3 transition-all duration-300">
+                      <IconComponent className="text-primary h-6 w-6" />
                     </div>
-                    <CardTitle className="text-xl font-semibold text-gray-900">
+                    <CardTitle className="text-foreground text-xl font-semibold">
                       {feature.title}
                     </CardTitle>
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600 leading-relaxed">
+                  <p className="text-muted-foreground leading-relaxed">
                     {feature.description}
                   </p>
                 </CardContent>
@@ -107,23 +119,36 @@ export default function Features() {
         </div>
 
         {/* Bottom CTA */}
-        <div className="text-center mt-16">
-          <Card className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 backdrop-blur-lg border-white/20 inline-block">
+        <div className="mt-16 text-center">
+          <Card className="from-primary/10 to-secondary/10 border-border/20 inline-block bg-gradient-to-r backdrop-blur-lg">
             <CardContent className="p-8">
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                Ready to start your musical journey?
+              <h3 className="text-foreground mb-4 text-2xl font-bold">
+                Prêt à commencer votre voyage musical ?
               </h3>
-              <p className="text-gray-600 mb-6">
-                Join thousands of music enthusiasts already improving their skills.
+              <p className="text-muted-foreground mb-6">
+                Rejoignez des milliers de passionnés de musique qui améliorent
+                déjà leurs compétences.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <span className="inline-flex items-center px-4 py-2 rounded-full bg-green-100 text-green-800 text-sm font-medium">
-                  <span className="w-2 h-2 bg-green-400 rounded-full mr-2"></span>
-                  Free during beta
+              <div className="flex flex-col justify-center gap-4 sm:flex-row">
+                {' '}
+                <Button
+                  asChild
+                  className="from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-primary-foreground bg-gradient-to-r"
+                >
+                  <Link href="/spotify" className="inline-flex items-center">
+                    <Music className="mr-2 h-4 w-4" />
+                    Connecter Spotify
+                  </Link>
+                </Button>
+              </div>
+              <div className="mt-4 flex flex-col justify-center gap-4 sm:flex-row">
+                <span className="bg-chart-1/20 text-chart-1 border-chart-1/30 inline-flex items-center rounded-full border px-4 py-2 text-sm font-medium">
+                  <span className="bg-chart-1 mr-2 h-2 w-2 rounded-full"></span>
+                  Gratuit pendant la bêta
                 </span>
-                <span className="inline-flex items-center px-4 py-2 rounded-full bg-blue-100 text-blue-800 text-sm font-medium">
-                  <span className="w-2 h-2 bg-blue-400 rounded-full mr-2"></span>
-                  No credit card required
+                <span className="bg-chart-2/20 text-chart-2 border-chart-2/30 inline-flex items-center rounded-full border px-4 py-2 text-sm font-medium">
+                  <span className="bg-chart-2 mr-2 h-2 w-2 rounded-full"></span>
+                  Aucune carte bancaire requise
                 </span>
               </div>
             </CardContent>

@@ -10,11 +10,9 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+    <div className="from-background via-secondary to-accent min-h-screen bg-gradient-to-br">
       <Header />
-      <main className="pt-16">
-        {children}
-      </main>
+      <main className="pt-16">{children}</main>
       <Footer />
     </div>
   )

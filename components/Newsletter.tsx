@@ -4,11 +4,14 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Mail, CheckCircle, AlertCircle } from 'lucide-react'
+import { Mail, CheckCircle, AlertCircle, Music } from 'lucide-react'
+import Link from 'next/link'
 
 export default function Newsletter() {
   const [email, setEmail] = useState('')
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const [status, setStatus] = useState<
+    'idle' | 'loading' | 'success' | 'error'
+  >('idle')
   const [message, setMessage] = useState('')
 
   const validateEmail = (email: string) => {
@@ -18,84 +21,92 @@ export default function Newsletter() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (!email.trim()) {
       setStatus('error')
-      setMessage('Please enter your email address.')
+      setMessage('Veuillez saisir votre adresse e-mail.')
       return
     }
 
     if (!validateEmail(email)) {
       setStatus('error')
-      setMessage('Please enter a valid email address.')
+      setMessage('Veuillez saisir une adresse e-mail valide.')
       return
     }
 
     setStatus('loading')
-    
+
     // Simulate API call
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500))
+      await new Promise((resolve) => setTimeout(resolve, 1500))
       setStatus('success')
-      setMessage('Thank you! You\'ll be notified when we launch.')
-      setEmail('')    } catch {
+      setMessage('Merci ! Vous serez notifié lors du lancement.')
+      setEmail('')
+    } catch {
       setStatus('error')
-      setMessage('Something went wrong. Please try again.')
+      setMessage("Une erreur s'est produite. Veuillez réessayer.")
     }
   }
-
   return (
-    <section id="newsletter" className="py-24 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        <Card className="bg-white/10 backdrop-blur-lg border-white/20 shadow-2xl overflow-hidden">
+    <section id="newsletter" className="px-4 py-24 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-4xl">
+        <Card className="bg-card/10 border-border/20 relative overflow-hidden shadow-2xl backdrop-blur-lg">
           {/* Background decorative elements */}
           <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-purple-400/10 rounded-full blur-2xl"></div>
-            <div className="absolute bottom-0 left-0 w-32 h-32 bg-pink-400/10 rounded-full blur-2xl"></div>
+            <div className="bg-primary/10 absolute top-0 right-0 h-32 w-32 rounded-full blur-2xl"></div>
+            <div className="bg-secondary/10 absolute bottom-0 left-0 h-32 w-32 rounded-full blur-2xl"></div>
           </div>
-          
+
           <div className="relative z-10">
-            <CardHeader className="text-center pb-8">
-              <div className="mx-auto mb-6 p-4 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-full border border-purple-300/30 w-fit">
-                <Mail className="h-8 w-8 text-purple-600" />
+            <CardHeader className="pb-8 text-center">
+              <div className="from-primary/20 to-secondary/20 border-primary/30 mx-auto mb-6 w-fit rounded-full border bg-gradient-to-br p-4">
+                <Mail className="text-primary h-8 w-8" />
               </div>
-              <CardTitle className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Get Early Access
+              <CardTitle className="text-foreground mb-4 text-3xl font-bold md:text-4xl">
+                Accès anticipé gratuit
               </CardTitle>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Be the first to know when Melofix launches. Join our exclusive waitlist 
-                and get priority access to beta features, special pricing, and musical challenges.
+              <p className="text-muted-foreground mx-auto max-w-2xl text-lg">
+                Soyez les premiers informés du lancement de Melodix. Rejoignez
+                notre liste d&apos;attente exclusive et obtenez un accès
+                prioritaire aux fonctionnalités bêta, aux tarifs spéciaux et aux
+                défis musicaux.
               </p>
             </CardHeader>
 
             <CardContent className="px-8 pb-8">
-              <form onSubmit={handleSubmit} className="max-w-md mx-auto">
-                <div className="flex flex-col sm:flex-row gap-4">
+              <form onSubmit={handleSubmit} className="mx-auto max-w-md">
+                <div className="flex flex-col gap-4 sm:flex-row">
                   <div className="flex-1">
                     <Input
                       type="email"
-                      placeholder="Enter your email address"
+                      placeholder="Entrez votre adresse e-mail"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className={`h-12 bg-white/20 backdrop-blur-sm border-white/30 placeholder:text-gray-500 text-gray-900 focus:bg-white/30 focus:border-purple-400 transition-all duration-300 ${
-                        status === 'error' ? 'border-red-400 focus:border-red-400' : ''
+                      className={`bg-card/20 border-border/30 placeholder:text-muted-foreground text-foreground focus:bg-card/30 focus:border-primary h-12 backdrop-blur-sm transition-all duration-300 ${
+                        status === 'error'
+                          ? 'border-destructive focus:border-destructive'
+                          : ''
                       }`}
                       disabled={status === 'loading'}
-                      aria-describedby={status === 'error' || status === 'success' ? 'form-message' : undefined}
+                      aria-describedby={
+                        status === 'error' || status === 'success'
+                          ? 'form-message'
+                          : undefined
+                      }
                     />
                   </div>
                   <Button
                     type="submit"
                     disabled={status === 'loading'}
-                    className="h-12 px-8 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-primary-foreground h-12 bg-gradient-to-r px-8 font-semibold shadow-lg transition-all duration-300 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     {status === 'loading' ? (
                       <div className="flex items-center">
-                        <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
-                        Joining...
+                        <div className="border-primary-foreground mr-2 h-4 w-4 animate-spin rounded-full border-2 border-t-transparent"></div>
+                        Inscription...
                       </div>
                     ) : (
-                      'Join Waitlist'
+                      'Rejoindre la liste'
                     )}
                   </Button>
                 </div>
@@ -104,32 +115,52 @@ export default function Newsletter() {
                 {(status === 'success' || status === 'error') && (
                   <div
                     id="form-message"
-                    className={`mt-4 p-4 rounded-lg flex items-center ${
+                    className={`mt-4 flex items-center rounded-lg p-4 ${
                       status === 'success'
-                        ? 'bg-green-100/20 backdrop-blur-sm border border-green-300/30 text-green-800'
-                        : 'bg-red-100/20 backdrop-blur-sm border border-red-300/30 text-red-800'
+                        ? 'bg-chart-1/20 border-chart-1/30 text-chart-1 border backdrop-blur-sm'
+                        : 'bg-destructive/20 border-destructive/30 text-destructive border backdrop-blur-sm'
                     }`}
                     role="alert"
                   >
                     {status === 'success' ? (
-                      <CheckCircle className="h-5 w-5 mr-2 flex-shrink-0" />
+                      <CheckCircle className="mr-2 h-5 w-5 flex-shrink-0" />
                     ) : (
-                      <AlertCircle className="h-5 w-5 mr-2 flex-shrink-0" />
+                      <AlertCircle className="mr-2 h-5 w-5 flex-shrink-0" />
                     )}
                     <span className="text-sm font-medium">{message}</span>
                   </div>
                 )}
               </form>
 
+              {/* Spotify CTA */}
+              <div className="mt-8 text-center">
+                <div className="flex flex-col items-center gap-4">
+                  <p className="text-muted-foreground text-sm">
+                    Ou connectez votre compte Spotify dès maintenant
+                  </p>{' '}
+                  <Button
+                    variant="outline"
+                    className="border-border hover:bg-accent hover:border-border/60"
+                    asChild
+                  >
+                    <Link href="/spotify" className="inline-flex items-center">
+                      <Music className="mr-2 h-4 w-4" />
+                      Connecter Spotify
+                    </Link>
+                  </Button>
+                </div>
+              </div>
+
               {/* Additional Info */}
               <div className="mt-8 text-center">
-                <p className="text-sm text-gray-500 mb-4">
-                  Join 10,000+ music enthusiasts already on the waitlist
+                <p className="text-muted-foreground mb-4 text-sm">
+                  Rejoignez 10 000+ passionnés de musique déjà sur la liste
+                  d&apos;attente
                 </p>
-                <div className="flex justify-center space-x-6 text-xs text-gray-400">
-                  <span>✓ No spam, ever</span>
-                  <span>✓ Unsubscribe anytime</span>
-                  <span>✓ Early access perks</span>
+                <div className="text-muted-foreground flex justify-center space-x-6 text-xs">
+                  <span>✓ Aucun spam, jamais</span>
+                  <span>✓ Désabonnement à tout moment</span>
+                  <span>✓ Avantages d&apos;accès anticipé</span>
                 </div>
               </div>
             </CardContent>
