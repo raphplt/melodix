@@ -9,12 +9,19 @@ import {
   NavigationMenuList,
 } from '@/components/ui/navigation-menu'
 import { Menu, X, User, LogOut } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSpotifyAuth } from '@/contexts/AuthContext'
 import Image from 'next/image'
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isClient, setIsClient] = useState(false)
+
+  // Éviter l'hydratation mismatch
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
   const {
     isAuthenticated,
     isLoading,
@@ -27,9 +34,18 @@ export default function Header() {
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen)
   }
-
   // Composant pour l'affichage de l'utilisateur connecté
   const UserDisplay = () => {
+    // Attendre que le client soit hydraté
+    if (!isClient) {
+      return (
+        <Button className="btn-spotify border-0 shadow-lg">
+          <User className="mr-2 h-4 w-4" />
+          Connecter Spotify
+        </Button>
+      )
+    }
+
     if (isLoading) {
       return (
         <div className="flex items-center space-x-2">
@@ -81,7 +97,7 @@ export default function Header() {
   }
 
   return (
-    <header className="glass border-primary/20 fixed top-0 right-0 left-0 z-50 border-b">
+    <header className="glass border-primary/20 fixed left-0 right-0 top-0 z-50 border-b">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Premium Logo */}

@@ -8,7 +8,6 @@ import {
 } from 'react'
 import {
   useSession,
-  SessionProvider,
   signIn as nextAuthSignIn,
   signOut as nextAuthSignOut,
 } from 'next-auth/react'
@@ -60,11 +59,17 @@ function SpotifyAuthProviderInner({ children }: { children: ReactNode }) {
   const { data: session, status } = useSession()
   const [user, setUser] = useState<SpotifyUser | null>(null)
   const [spotifyError, setSpotifyError] = useState<string | null>(null)
+  // Debug pour voir l'état de la session
+  useEffect(() => {
+    console.log('Session status:', status)
+    console.log('Session data:', session)
+  }, [status, session])
 
   // Vérifier l'état de l'authentification
-  const isAuthenticated = !!session?.accessToken && status === 'authenticated'
+  const isAuthenticated = status === 'authenticated' && !!session
   const isLoading = status === 'loading'
-  const hasSpotifyAccess = !!session?.accessToken && !session?.error
+  const hasSpotifyAccess =
+    isAuthenticated && !!session?.accessToken && !session?.error
 
   // Charger les données utilisateur depuis le cache si disponible
   useEffect(() => {
@@ -125,13 +130,9 @@ function SpotifyAuthProviderInner({ children }: { children: ReactNode }) {
   )
 }
 
-// Provider principal qui englobe SessionProvider
+// Provider principal qui utilise le SessionProvider existant
 export function SpotifyAuthProvider({ children }: { children: ReactNode }) {
-  return (
-    <SessionProvider>
-      <SpotifyAuthProviderInner>{children}</SpotifyAuthProviderInner>
-    </SessionProvider>
-  )
+  return <SpotifyAuthProviderInner>{children}</SpotifyAuthProviderInner>
 }
 
 // Hook pour mettre à jour les données utilisateur (utilisé par les composants)
