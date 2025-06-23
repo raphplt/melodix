@@ -32,11 +32,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} pt-16 antialiased`}
       >
-        <Header />
         <AuthProvider>
-          <SpotifyAuthProvider>{children}</SpotifyAuthProvider>
+          <SpotifyAuthProvider>
+            <Header />
+            {children}
+            <Footer />
+          </SpotifyAuthProvider>
         </AuthProvider>
-        <Footer />
       </body>
     </html>
   )

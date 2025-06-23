@@ -21,7 +21,8 @@ export default function Header() {
   useEffect(() => {
     setIsClient(true)
   }, [])
-  const { isAuthenticated, isLoading, user, signOut } = useSpotifyAuth()
+  const { isAuthenticated, isLoading, user, signOut, hasSpotifyAccess } =
+    useSpotifyAuth()
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen)
@@ -48,22 +49,23 @@ export default function Header() {
     if (isAuthenticated && user) {
       return (
         <div className="flex items-center space-x-3">
-          <Link href="/profile" className="flex items-center space-x-2">
-            {user.images && user.images[0] && (
-              <Image
-                src={user.images[0].url}
-                alt={user.display_name}
-                width={32}
-                height={32}
-                className="rounded-full"
-              />
-            )}
-            <div className="hidden lg:block">
-              <p className="text-foreground text-sm font-medium">
-                {user.display_name}
-              </p>
-            </div>
-          </Link>
+          {user.images && user.images[0] && (
+            <Image
+              src={user.images[0].url}
+              alt={user.display_name}
+              width={32}
+              height={32}
+              className="rounded-full"
+            />
+          )}
+          <div className="hidden lg:block">
+            <p className="text-foreground text-sm font-medium">
+              {user.display_name}
+            </p>
+            <p className="text-muted-foreground text-xs">
+              {hasSpotifyAccess ? 'Connecté' : 'Connexion expirée'}
+            </p>
+          </div>
           <Button
             onClick={signOut}
             variant="ghost"

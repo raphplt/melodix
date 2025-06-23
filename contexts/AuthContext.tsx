@@ -16,24 +16,19 @@ import { SpotifyUser } from '@/types/spotify'
 
 // Types pour le contexte
 interface SpotifyAuthContextType {
-  // État de la session
   isAuthenticated: boolean
   isLoading: boolean
 
-  // Données utilisateur
   user: SpotifyUser | null
   session: Session | null
 
-  // Méthodes d'authentification
   signIn: () => void
   signOut: () => void
 
-  // État de connexion Spotify
   hasSpotifyAccess: boolean
   spotifyError: string | null
 }
 
-// Contexte avec valeurs par défaut
 const SpotifyAuthContext = createContext<SpotifyAuthContextType>({
   isAuthenticated: false,
   isLoading: true,
@@ -45,7 +40,6 @@ const SpotifyAuthContext = createContext<SpotifyAuthContextType>({
   spotifyError: null,
 })
 
-// Hook pour utiliser le contexte
 export const useSpotifyAuth = () => {
   const context = useContext(SpotifyAuthContext)
   if (!context) {
@@ -54,24 +48,20 @@ export const useSpotifyAuth = () => {
   return context
 }
 
-// Provider interne qui utilise NextAuth
 function SpotifyAuthProviderInner({ children }: { children: ReactNode }) {
   const { data: session, status } = useSession()
   const [user, setUser] = useState<SpotifyUser | null>(null)
   const [spotifyError, setSpotifyError] = useState<string | null>(null)
-  // Debug pour voir l'état de la session
   useEffect(() => {
     console.log('Session status:', status)
     console.log('Session data:', session)
   }, [status, session])
 
-  // Vérifier l'état de l'authentification
   const isAuthenticated = status === 'authenticated' && !!session
   const isLoading = status === 'loading'
   const hasSpotifyAccess =
     isAuthenticated && !!session?.accessToken && !session?.error
 
-  // Charger les données utilisateur depuis le cache si disponible
   useEffect(() => {
     if (isAuthenticated) {
       const cachedData = localStorage.getItem('spotify-data-cache')
@@ -86,7 +76,6 @@ function SpotifyAuthProviderInner({ children }: { children: ReactNode }) {
         }
       }
 
-      // Gérer les erreurs de session
       if (session?.error) {
         setSpotifyError(session.error)
       } else {
@@ -97,18 +86,16 @@ function SpotifyAuthProviderInner({ children }: { children: ReactNode }) {
       setSpotifyError(null)
     }
   }, [isAuthenticated, session])
-  // Méthodes d'authentification
+
   const signIn = () => {
-    nextAuthSignIn('spotify')
+    nextAuthSignIn('spotify', { callbackUrl: '/profile' })
   }
 
   const signOut = () => {
-    // Nettoyer le cache local
     localStorage.removeItem('spotify-data-cache')
     setUser(null)
     setSpotifyError(null)
 
-    // Déconnexion NextAuth
     nextAuthSignOut()
   }
 
@@ -130,12 +117,10 @@ function SpotifyAuthProviderInner({ children }: { children: ReactNode }) {
   )
 }
 
-// Provider principal qui utilise le SessionProvider existant
 export function SpotifyAuthProvider({ children }: { children: ReactNode }) {
   return <SpotifyAuthProviderInner>{children}</SpotifyAuthProviderInner>
 }
 
-// Hook pour mettre à jour les données utilisateur (utilisé par les composants)
 export const useUpdateSpotifyUser = () => {
   const [, setUser] = useState<SpotifyUser | null>(null)
 

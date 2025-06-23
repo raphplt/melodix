@@ -63,8 +63,8 @@ export default function Stats() {
         {/* Stats Section */}
         <div className="mb-16 text-center">
           <h2 className="text-foreground mb-6 text-3xl font-bold md:text-4xl">
-            Rejoignez une communauté
-            <span className="from-primary to-secondary bg-gradient-to-r bg-clip-text text-transparent">
+            Rejoignez une communauté{' '}
+            <span className="from-primary to-secondary-foreground bg-gradient-to-r bg-clip-text text-transparent">
               passionnée
             </span>
           </h2>

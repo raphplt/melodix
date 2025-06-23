@@ -77,8 +77,8 @@ export default function Features() {
         {/* Section Header */}
         <div className="mb-16 text-center">
           <h2 className="text-foreground mb-6 text-3xl font-bold md:text-4xl lg:text-5xl">
-            Des fonctionnalités puissantes pour
-            <span className="from-primary to-secondary bg-gradient-to-r bg-clip-text text-transparent">
+            Des fonctionnalités puissantes pour{' '}
+            <span className="from-primary to-secondary-foreground bg-gradient-to-r bg-clip-text text-transparent">
               votre croissance musicale
             </span>
           </h2>
@@ -132,7 +132,7 @@ export default function Features() {
               <div className="flex flex-col justify-center gap-4 sm:flex-row">
                 <Button
                   asChild
-                  className="from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-primary-foreground bg-gradient-to-r"
+                  className="from-primary to-secondary-foreground hover:from-primary/90 hover:to-secondary/90 text-primary-foreground bg-gradient-to-r"
                 >
                   <Link href="/spotify" className="inline-flex items-center">
                     <Music className="mr-2 h-4 w-4" />
