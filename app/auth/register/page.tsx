@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { useSpotifyAuth } from '@/contexts/AuthContext'
+import { useSpotifyAuth } from '@/contexts/SpotifyAuthProvider'
 import { Music, Shield, Heart, Users } from 'lucide-react'
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'

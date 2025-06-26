@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/navigation-menu'
 import { Menu, X, User, LogOut } from 'lucide-react'
 import { useState, useEffect } from 'react'
-import { useSpotifyAuth } from '@/contexts/AuthContext'
+import { useSpotifyAuth } from '@/contexts/SpotifyAuthProvider'
 import Image from 'next/image'
 
 export default function Header() {

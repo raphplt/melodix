@@ -75,4 +75,23 @@ export class SpotifyService {
       return null
     }
   }
+
+  async searchTrack(
+    query: string,
+    limit = 1
+  ): Promise<{ tracks: { items: SpotifyTrack[] } }> {
+    const encodedQuery = encodeURIComponent(query)
+    return this.makeRequest(
+      `/search?q=${encodedQuery}&type=track&limit=${limit}`
+    )
+  }
+
+  async getTrackById(id: string): Promise<SpotifyTrack> {
+    return this.makeRequest(`/tracks/${id}`)
+  }
+
+  async getMultipleTracks(ids: string[]): Promise<{ tracks: SpotifyTrack[] }> {
+    const idsString = ids.join(',')
+    return this.makeRequest(`/tracks?ids=${idsString}`)
+  }
 }

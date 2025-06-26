@@ -1,6 +1,6 @@
 'use client'
 import SpotifyProfile from '@/components/SpotifyProfile'
-import { useSpotifyAuth } from '@/contexts/AuthContext'
+import { useSpotifyAuth } from '@/contexts/SpotifyAuthProvider'
 import { redirect } from 'next/navigation'
 import { useEffect } from 'react'
 

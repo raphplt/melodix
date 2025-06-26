@@ -1,23 +1,26 @@
 'use client'
 
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
 } from '@/components/ui/navigation-menu'
-import { Menu, X, User, LogOut } from 'lucide-react'
+import { Menu, X, LogOut, User, Settings } from 'lucide-react'
 import { useState, useEffect } from 'react'
-import { useSpotifyAuth } from '@/contexts/AuthContext'
+import { useSpotifyAuth } from '@/contexts/SpotifyAuthProvider'
 import Image from 'next/image'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isClient, setIsClient] = useState(false)
 
-  // Éviter l'hydratation mismatch
   useEffect(() => {
     setIsClient(true)
   }, [])
@@ -29,13 +32,9 @@ export default function Header() {
 
   const UserDisplay = () => {
     if (!isClient) {
-      return (
-        <Button className="btn-spotify border-0 shadow-lg">
-          <User className="mr-2 h-4 w-4" />
-          Connecter Spotify
-        </Button>
-      )
+      return null
     }
+
     if (isLoading) {
       return (
         <div className="flex items-center space-x-2">
@@ -47,44 +46,63 @@ export default function Header() {
 
     if (isAuthenticated && user) {
       return (
-        <div className="flex items-center space-x-3">
-          <Link href="/profile" className="flex items-center space-x-2">
-            {user.images && user.images[0] && (
-              <Image
-                src={user.images[0].url}
-                alt={user.display_name}
-                width={32}
-                height={32}
-                className="rounded-full"
-              />
-            )}
-            <div className="hidden lg:block">
-              <p className="text-foreground text-sm font-medium">
-                {user.display_name}
-              </p>
+        <Popover>
+          <PopoverTrigger asChild>
+            <button className="hover:bg-primary/10 flex items-center space-x-2 rounded-lg p-2 transition-all duration-300">
+              {user.images && user.images[0] && (
+                <Image
+                  src={user.images[0].url}
+                  alt={user.display_name}
+                  width={32}
+                  height={32}
+                  className="rounded-full"
+                />
+              )}
+              <div className="hidden text-left lg:block">
+                <p className="text-foreground text-sm font-medium">
+                  {user.display_name}
+                </p>
+                {/* <p className="text-muted-foreground text-xs">Voir le profil</p> */}
+              </div>
+            </button>
+          </PopoverTrigger>
+          <PopoverContent className="w-56 p-2" align="end">
+            <div className="space-y-1">
+              <div className="border-b px-3 py-2">
+                <p className="text-sm font-medium">{user.display_name}</p>
+                <p className="text-muted-foreground text-xs">{user.email}</p>
+              </div>
+              <Link
+                href="/profile"
+                className="hover:bg-accent hover:text-accent-foreground flex items-center space-x-2 rounded-md px-3 py-2 text-sm transition-colors"
+              >
+                <User className="h-4 w-4" />
+                <span>Profil</span>
+              </Link>
+              <Link
+                href="/settings"
+                className="hover:bg-accent hover:text-accent-foreground flex items-center space-x-2 rounded-md px-3 py-2 text-sm transition-colors"
+              >
+                <Settings className="h-4 w-4" />
+                <span>Paramètres</span>
+              </Link>
+              <div className="border-t pt-1">
+                <button
+                  onClick={signOut}
+                  className="text-destructive hover:bg-destructive/10 flex w-full items-center space-x-2 rounded-md px-3 py-2 text-sm transition-colors"
+                >
+                  <LogOut className="h-4 w-4" />
+                  <span>Déconnexion</span>
+                </button>
+              </div>
             </div>
-          </Link>
-          <Button
-            onClick={signOut}
-            variant="ghost"
-            size="sm"
-            className="text-muted-foreground hover:text-destructive"
-          >
-            <LogOut className="h-4 w-4" />
-            <span className="hidden sm:ml-2 sm:inline">Déconnexion</span>
-          </Button>
-        </div>
+          </PopoverContent>
+        </Popover>
       )
     }
-    return (
-      <Button
-        onClick={() => (window.location.href = '/auth/login')}
-        className="btn-spotify border-0 shadow-lg"
-      >
-        <User className="mr-2 h-4 w-4" />
-        Connecter Spotify
-      </Button>
-    )
+
+    // Pour les visiteurs non connectés, on n'affiche rien car les liens sont dans la navigation
+    return null
   }
 
   return (
@@ -100,7 +118,7 @@ export default function Header() {
               Melodix
             </span>
           </Link>
-          {/* Premium Desktop Navigation */}
+          {/* Desktop Navigation */}
           <NavigationMenu className="hidden md:flex">
             <NavigationMenuList>
               <NavigationMenuItem>
@@ -113,46 +131,125 @@ export default function Header() {
                   </Link>
                 </NavigationMenuLink>
               </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuLink asChild>
-                  <Link
-                    href="/profile"
-                    className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg px-4 py-2 transition-all duration-300 hover:scale-105"
-                  >
-                    Profil
-                  </Link>
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuLink asChild>
-                  <Link
-                    href="#features"
-                    className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg px-4 py-2 transition-all duration-300 hover:scale-105"
-                  >
-                    Fonctionnalités
-                  </Link>
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuLink asChild>
-                  <Link
-                    href="#stats"
-                    className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg px-4 py-2 transition-all duration-300 hover:scale-105"
-                  >
-                    Stats
-                  </Link>
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuLink asChild>
-                  <Link
-                    href="#newsletter"
-                    className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg px-4 py-2 transition-all duration-300 hover:scale-105"
-                  >
-                    Contact
-                  </Link>
-                </NavigationMenuLink>
-              </NavigationMenuItem>
+              {isAuthenticated ? (
+                // Navigation pour utilisateur connecté
+                <>
+                  <NavigationMenuItem>
+                    <NavigationMenuLink asChild>
+                      <Link
+                        href="/play"
+                        className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg px-4 py-2 transition-all duration-300 hover:scale-105"
+                      >
+                        Jouer
+                      </Link>
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+                  <NavigationMenuItem>
+                    <NavigationMenuLink asChild>
+                      <Link
+                        href="/duels"
+                        className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg px-4 py-2 transition-all duration-300 hover:scale-105"
+                      >
+                        Duels
+                      </Link>
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+                  <NavigationMenuItem>
+                    <NavigationMenuLink asChild>
+                      <Link
+                        href="/classements"
+                        className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg px-4 py-2 transition-all duration-300 hover:scale-105"
+                      >
+                        Classements
+                      </Link>
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+                  <NavigationMenuItem>
+                    <NavigationMenuLink asChild>
+                      <Link
+                        href="/tournois"
+                        className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg px-4 py-2 transition-all duration-300 hover:scale-105"
+                      >
+                        Tournois
+                      </Link>
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+                  <NavigationMenuItem>
+                    <NavigationMenuLink asChild>
+                      <Link
+                        href="/profile"
+                        className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg px-4 py-2 transition-all duration-300 hover:scale-105"
+                      >
+                        Profil
+                      </Link>
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+                  <NavigationMenuItem>
+                    <NavigationMenuLink asChild>
+                      <Link
+                        href="/boutique"
+                        className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg px-4 py-2 transition-all duration-300 hover:scale-105"
+                      >
+                        Boutique
+                      </Link>
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+                </>
+              ) : (
+                // Navigation pour visiteur non connecté
+                <>
+                  <NavigationMenuItem>
+                    <NavigationMenuLink asChild>
+                      <Link
+                        href="#features"
+                        className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg px-4 py-2 transition-all duration-300 hover:scale-105"
+                      >
+                        Fonctionnalités
+                      </Link>
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+                  <NavigationMenuItem>
+                    <NavigationMenuLink asChild>
+                      <Link
+                        href="/tarifs"
+                        className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg px-4 py-2 transition-all duration-300 hover:scale-105"
+                      >
+                        Tarifs / Premium
+                      </Link>
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+                  <NavigationMenuItem>
+                    <NavigationMenuLink asChild>
+                      <Link
+                        href="/faq"
+                        className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg px-4 py-2 transition-all duration-300 hover:scale-105"
+                      >
+                        FAQ
+                      </Link>
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+                  <NavigationMenuItem>
+                    <NavigationMenuLink asChild>
+                      <Link
+                        href="/auth/login"
+                        className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg px-4 py-2 transition-all duration-300 hover:scale-105"
+                      >
+                        Connexion
+                      </Link>
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+                  <NavigationMenuItem>
+                    <NavigationMenuLink asChild>
+                      <Link
+                        href="/auth/register"
+                        className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg px-4 py-2 transition-all duration-300 hover:scale-105"
+                      >
+                        Inscription
+                      </Link>
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+                </>
+              )}
             </NavigationMenuList>
           </NavigationMenu>
           <div className="hidden md:flex">
@@ -170,7 +267,7 @@ export default function Header() {
             )}
           </button>
         </div>
-        {/* Premium Mobile Navigation */}
+        {/* Mobile Navigation */}
         {isMobileMenuOpen && (
           <div className="glass-dark border-primary/20 border-t py-4 md:hidden">
             <nav className="flex flex-col space-y-2">
@@ -181,34 +278,92 @@ export default function Header() {
               >
                 Accueil
               </Link>
-              <Link
-                href="/profile"
-                className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg px-4 py-2 transition-all duration-300"
-                onClick={toggleMobileMenu}
-              >
-                Profil
-              </Link>
-              <Link
-                href="#features"
-                className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg px-4 py-2 transition-all duration-300"
-                onClick={toggleMobileMenu}
-              >
-                Fonctionnalités
-              </Link>
-              <Link
-                href="#stats"
-                className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg px-4 py-2 transition-all duration-300"
-                onClick={toggleMobileMenu}
-              >
-                Stats
-              </Link>
-              <Link
-                href="#newsletter"
-                className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg px-4 py-2 transition-all duration-300"
-                onClick={toggleMobileMenu}
-              >
-                Contact
-              </Link>
+              {isAuthenticated ? (
+                // Navigation mobile pour utilisateur connecté
+                <>
+                  <Link
+                    href="/jouer"
+                    className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg px-4 py-2 transition-all duration-300"
+                    onClick={toggleMobileMenu}
+                  >
+                    Jouer
+                  </Link>
+                  <Link
+                    href="/duels"
+                    className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg px-4 py-2 transition-all duration-300"
+                    onClick={toggleMobileMenu}
+                  >
+                    Duels
+                  </Link>
+                  <Link
+                    href="/classements"
+                    className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg px-4 py-2 transition-all duration-300"
+                    onClick={toggleMobileMenu}
+                  >
+                    Classements
+                  </Link>
+                  <Link
+                    href="/tournois"
+                    className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg px-4 py-2 transition-all duration-300"
+                    onClick={toggleMobileMenu}
+                  >
+                    Tournois
+                  </Link>
+                  <Link
+                    href="/profile"
+                    className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg px-4 py-2 transition-all duration-300"
+                    onClick={toggleMobileMenu}
+                  >
+                    Profil
+                  </Link>
+                  <Link
+                    href="/boutique"
+                    className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg px-4 py-2 transition-all duration-300"
+                    onClick={toggleMobileMenu}
+                  >
+                    Boutique
+                  </Link>
+                </>
+              ) : (
+                // Navigation mobile pour visiteur non connecté
+                <>
+                  <Link
+                    href="#features"
+                    className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg px-4 py-2 transition-all duration-300"
+                    onClick={toggleMobileMenu}
+                  >
+                    Fonctionnalités
+                  </Link>
+                  <Link
+                    href="/tarifs"
+                    className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg px-4 py-2 transition-all duration-300"
+                    onClick={toggleMobileMenu}
+                  >
+                    Tarifs / Premium
+                  </Link>
+                  <Link
+                    href="/faq"
+                    className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg px-4 py-2 transition-all duration-300"
+                    onClick={toggleMobileMenu}
+                  >
+                    FAQ
+                  </Link>
+                  <Link
+                    href="/auth/login"
+                    className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg px-4 py-2 transition-all duration-300"
+                    onClick={toggleMobileMenu}
+                  >
+                    Connexion
+                  </Link>
+                  <Link
+                    href="/auth/register"
+                    className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg px-4 py-2 transition-all duration-300"
+                    onClick={toggleMobileMenu}
+                  >
+                    Inscription
+                  </Link>
+                </>
+              )}
               <div className="px-4 pt-2">
                 <UserDisplay />
               </div>

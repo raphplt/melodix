@@ -1,5 +1,5 @@
 'use client'
-import { useSpotifyAuth } from '@/contexts/AuthContext'
+import { useSpotifyAuth } from '@/contexts/SpotifyAuthProvider'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Music, User } from 'lucide-react'

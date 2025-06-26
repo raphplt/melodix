@@ -450,3 +450,7 @@
 .backdrop-blur-premium {
   backdrop-filter: blur(24px) saturate(1.8) brightness(1.1);
 }
+
+button {
+  cursor: pointer;
+}

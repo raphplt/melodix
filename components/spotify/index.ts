@@ -12,4 +12,7 @@ export { default as ExampleSpotifyComponent } from '../examples/ExampleSpotifyCo
 
 // Export the custom hook and context
 export { useSpotifyData } from '@/hooks/useSpotifyData'
-export { useSpotifyAuth, SpotifyAuthProvider } from '@/contexts/AuthContext'
+export {
+  useSpotifyAuth,
+  SpotifyAuthProvider,
+} from '@/contexts/SpotifyAuthProvider'
